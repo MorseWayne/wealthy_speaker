@@ -20,7 +20,7 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 
-app = FastAPI(title="Financial AI Analyzer API", version="1.0.0")
+app = FastAPI(title="Wealthy Speaker AI Analyzer API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,7 +36,7 @@ investment_advisor = InvestmentAdvisor()
 
 @app.get("/")
 async def root():
-    return {"message": "Financial AI Analyzer API", "version": "1.0.0"}
+    return {"message": "Wealthy Speaker AI Analyzer API", "version": "1.0.0"}
 
 
 @app.get("/health")

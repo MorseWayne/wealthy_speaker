@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"financial-summary/data-collector/internal/models"
+	"wealthy-speaker/collector/internal/models"
 )
 
 // NewsCollector 新闻采集器

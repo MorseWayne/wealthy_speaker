@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"financial-summary/data-collector/internal/database"
-	"financial-summary/data-collector/internal/models"
+	"wealthy-speaker/collector/internal/database"
+	"wealthy-speaker/collector/internal/models"
 
 	"github.com/gorilla/mux"
 )

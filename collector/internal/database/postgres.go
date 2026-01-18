@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"financial-summary/data-collector/internal/models"
+	"wealthy-speaker/collector/internal/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

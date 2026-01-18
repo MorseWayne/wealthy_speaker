@@ -78,14 +78,14 @@ docker-compose logs -f
 docker-compose up -d postgres redis
 
 # 运行数据库迁移
-cd services/data-collector
+cd collector
 go run cmd/migrate/main.go
 ```
 
 #### 2. 启动数据采集服务 (Go)
 
 ```bash
-cd services/data-collector
+cd collector
 
 # 安装依赖
 go mod download
@@ -94,14 +94,14 @@ go mod download
 go run cmd/server/main.go
 
 # 或者构建后运行
-go build -o bin/financial-service cmd/server/main.go
-./bin/financial-service
+go build -o bin/collector cmd/server/main.go
+./bin/collector
 ```
 
 #### 3. 启动AI分析引擎 (Python)
 
 ```bash
-cd services/ai-analyzer
+cd analyzer
 
 # 安装依赖
 pip install -r requirements.txt
@@ -113,7 +113,7 @@ uvicorn main:app --reload --port 8000
 #### 4. 启动Web管理界面 (Node.js)
 
 ```bash
-cd web-admin
+cd web
 
 # 安装依赖
 npm install
@@ -194,7 +194,7 @@ curl http://localhost:8080/api/summary/list?limit=10
 ### Go服务测试
 
 ```bash
-cd services/data-collector
+cd collector
 
 # 运行所有测试
 go test ./...
@@ -210,7 +210,7 @@ go tool cover -html=coverage.out
 ### Python AI引擎测试
 
 ```bash
-cd services/ai-analyzer
+cd analyzer
 
 # 运行所有测试
 pytest
@@ -225,7 +225,7 @@ pytest --cov=analyzer --cov-report=html
 ### Web前端测试
 
 ```bash
-cd web-admin
+cd web
 
 # 运行所有测试
 npm test
@@ -294,10 +294,10 @@ docker-compose down
 
 ```bash
 # 查看实时日志
-docker-compose logs -f financial-service
+docker-compose logs -f collector
 
 # 查看特定服务的日志
-docker-compose logs ai-analyzer
+docker-compose logs analyzer
 
 # 导出日志
 docker-compose logs > app.log

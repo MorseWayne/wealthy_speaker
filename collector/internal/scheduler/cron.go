@@ -4,10 +4,10 @@ import (
 	"log"
 	"time"
 
-	"financial-summary/data-collector/internal/collector"
-	"financial-summary/data-collector/internal/database"
-	"financial-summary/data-collector/internal/models"
-	"financial-summary/data-collector/internal/push"
+	"wealthy-speaker/collector/internal/collector"
+	"wealthy-speaker/collector/internal/database"
+	"wealthy-speaker/collector/internal/models"
+	"wealthy-speaker/collector/internal/push"
 
 	"github.com/robfig/cron/v3"
 )

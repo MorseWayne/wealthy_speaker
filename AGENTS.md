@@ -1,15 +1,15 @@
-# AGENTS.md - Development Guidelines for Financial Summary Service
+# AGENTS.md - Development Guidelines for Wealthy Speaker
 
-This file contains guidelines for agentic coding agents working on the financial summary service repository.
+This file contains guidelines for agentic coding agents working on the wealthy speaker repository.
 
 ## Build Commands
 
 ### Go Services (Data Collector)
 ```bash
-cd services/data-collector
+cd collector
 
 # Build
-go build -o bin/financial-service cmd/server/main.go
+go build -o bin/wealthy-service cmd/server/main.go
 
 # Run tests
 go test ./...
@@ -29,7 +29,7 @@ go vet ./...
 
 ### Python AI Engine
 ```bash
-cd services/ai-analyzer
+cd analyzer
 
 # Install dependencies
 pip install -r requirements.txt
@@ -50,7 +50,7 @@ black analyzer/
 
 ### Node.js Web Interface
 ```bash
-cd services/web-admin
+cd web
 
 # Install dependencies
 npm install
@@ -82,7 +82,7 @@ import (
     "github.com/gin-gonic/gin"
     "github.com/robfig/cron/v3"
 
-    "financial-summary/data-collector/internal/models"
+    "wealthy-speaker/collector/internal/models"
 )
 ```
 

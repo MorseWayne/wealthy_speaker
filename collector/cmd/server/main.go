@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"financial-summary/data-collector/internal/api"
-	"financial-summary/data-collector/internal/database"
-	"financial-summary/data-collector/internal/scheduler"
+	"wealthy-speaker/collector/internal/api"
+	"wealthy-speaker/collector/internal/database"
+	"wealthy-speaker/collector/internal/scheduler"
 
 	"github.com/spf13/viper"
 )

@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"financial-summary/data-collector/internal/models"
+	"wealthy-speaker/collector/internal/models"
 
 	"github.com/go-resty/resty/v2"
 )

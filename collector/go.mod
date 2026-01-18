@@ -1,4 +1,4 @@
-module financial-summary/data-collector
+module wealthy-speaker/collector
 
 go 1.21
 

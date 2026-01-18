@@ -37,7 +37,7 @@ services:
 
   data-collector:
     build:
-      context: ./services/data-collector
+      context: ./collector
       dockerfile: Dockerfile
     container_name: wealthy-data-collector
     depends_on:
@@ -68,7 +68,7 @@ services:
 
   ai-analyzer:
     build:
-      context: ./services/ai-analyzer
+      context: ./analyzer
       dockerfile: Dockerfile
     container_name: wealthy-ai-analyzer
     depends_on:
@@ -85,15 +85,15 @@ services:
       - "8000:8000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 30s
     restart: unless-stopped
 
   web-admin:
     build:
-      context: ./services/web-admin
+      context: ./web
       dockerfile: Dockerfile
     container_name: wealthy-web-admin
     depends_on:

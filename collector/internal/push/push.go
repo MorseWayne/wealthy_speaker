@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"financial-summary/data-collector/internal/models"
+	"wealthy-speaker/collector/internal/models"
 )
 
 // WeChatPusher 微信推送服务

@@ -1,8 +1,8 @@
 /**
- * Financial Dashboard - Main Application
+ * Wealthy Dashboard - Main Application
  */
 
-class FinancialDashboard {
+class WealthyDashboard {
   constructor() {
     this.currentTab = 'today';
     this.theme = localStorage.getItem('theme') || 'light';
@@ -436,5 +436,5 @@ class FinancialDashboard {
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  window.dashboard = new FinancialDashboard();
+  window.dashboard = new WealthyDashboard();
 });

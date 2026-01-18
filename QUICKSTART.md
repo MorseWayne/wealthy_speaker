@@ -93,9 +93,9 @@ docker-compose restart
 ## 查看特定服务日志
 
 ```bash
-docker-compose logs -f data-collector
-docker-compose logs -f ai-analyzer
-docker-compose logs -f web-admin
+docker-compose logs -f collector
+docker-compose logs -f analyzer
+docker-compose logs -f web
 ```
 
 ## 故障排查
@@ -121,24 +121,24 @@ docker-compose exec postgres psql -U fin_user -d financial_db -c "SELECT version
 
 1. 检查网络连接：
 ```bash
-docker-compose exec data-collector ping -c 3 google.com
+docker-compose exec collector ping -c 3 google.com
 ```
 
 2. 查看API日志：
 ```bash
-docker-compose logs data-collector | tail -100
+docker-compose logs collector | tail -100
 ```
 
 ### AI分析失败
 
 1. 检查Python依赖：
 ```bash
-docker-compose exec ai-analyzer pip list
+docker-compose exec analyzer pip list
 ```
 
 2. 查看分析日志：
 ```bash
-docker-compose logs ai-analyzer | tail -100
+docker-compose logs analyzer | tail -100
 ```
 
 ## 开发模式
@@ -147,20 +147,20 @@ docker-compose logs ai-analyzer | tail -100
 
 #### 数据收集服务
 ```bash
-cd services/data-collector
+cd collector
 go run cmd/server/main.go
 ```
 
 #### AI分析引擎
 ```bash
-cd services/ai-analyzer
+cd analyzer
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
 #### Web管理界面
 ```bash
-cd services/web-admin
+cd web
 npm install
 npm run dev
 ```

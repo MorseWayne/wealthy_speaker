@@ -1,7 +1,7 @@
 {
-  "name": "financial-summary-web",
+  "name": "wealthy-speaker-web",
   "version": "1.0.0",
-  "description": "Web admin interface for financial summary service",
+  "description": "Web admin interface for wealthy speaker service",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
