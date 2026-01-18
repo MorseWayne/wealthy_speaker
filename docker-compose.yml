@@ -35,11 +35,11 @@ services:
       retries: 5
     restart: unless-stopped
 
-  data-collector:
+  collector:
     build:
       context: ./collector
       dockerfile: Dockerfile
-    container_name: wealthy-data-collector
+    container_name: wealthy-collector
     depends_on:
       postgres:
         condition: service_healthy
@@ -66,11 +66,11 @@ services:
       start_period: 40s
     restart: unless-stopped
 
-  ai-analyzer:
+  analyzer:
     build:
       context: ./analyzer
       dockerfile: Dockerfile
-    container_name: wealthy-ai-analyzer
+    container_name: wealthy-analyzer
     depends_on:
       postgres:
         condition: service_healthy
@@ -91,20 +91,20 @@ services:
     start_period: 30s
     restart: unless-stopped
 
-  web-admin:
+  web:
     build:
       context: ./web
       dockerfile: Dockerfile
-    container_name: wealthy-web-admin
+    container_name: wealthy-web
     depends_on:
-      data-collector:
+      collector:
         condition: service_healthy
-      ai-analyzer:
+      analyzer:
         condition: service_healthy
     environment:
       PORT: 3000
-      DATA_COLLECTOR_URL: http://data-collector:8080
-      AI_ANALYZER_URL: http://ai-analyzer:8000
+      DATA_COLLECTOR_URL: http://collector:8080
+      AI_ANALYZER_URL: http://analyzer:8000
     ports:
       - "3000:3000"
     healthcheck:

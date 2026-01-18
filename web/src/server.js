@@ -10,8 +10,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-const DATA_COLLECTOR_URL = process.env.DATA_COLLECTOR_URL || 'http://data-collector:8080';
-const AI_ANALYZER_URL = process.env.AI_ANALYZER_URL || 'http://ai-analyzer:8000';
+const DATA_COLLECTOR_URL = process.env.DATA_COLLECTOR_URL || 'http://collector:8080';
+const AI_ANALYZER_URL = process.env.AI_ANALYZER_URL || 'http://analyzer:8000';
 
 app.get('/', (req, res) => {
   res.json({

@@ -12,40 +12,46 @@
 ### 一键启动
 
 1. 复制环境变量模板：
+
 ```bash
 cp .env.example .env
 ```
 
-2. 编辑 `.env` 文件，配置必要参数：
+1. 编辑 `.env` 文件，配置必要参数：
+
 ```bash
 nano .env
 ```
 
-3. 启动所有服务：
+1. 启动所有服务：
+
 ```bash
 docker-compose up -d
 ```
 
-4. 查看服务状态：
+1. 查看服务状态：
+
 ```bash
 docker-compose ps
 ```
 
-5. 查看日志：
+1. 查看日志：
+
 ```bash
 docker-compose logs -f
 ```
 
 ### 服务访问
 
-- **Web管理界面**: http://localhost:3000
-- **数据收集API**: http://localhost:8080
-- **AI分析API**: http://localhost:8000
+- **Web管理界面**: <http://localhost:3000>
+- **数据收集API**: <http://localhost:8080>
+- **AI分析API**: <http://localhost:8000>
 - **数据库**: localhost:5432
 
 ## 服务说明
 
 ### 1. 数据收集服务 (Go)
+
 - **端口**: 8080
 - **功能**: 定时采集股票数据和新闻
 - **定时任务**:
@@ -54,6 +60,7 @@ docker-compose logs -f
   - 每周日02:00: 清理过期数据
 
 ### 2. AI分析引擎 (Python)
+
 - **端口**: 8000
 - **功能**:
   - 新闻情感分析
@@ -61,6 +68,7 @@ docker-compose logs -f
   - 技术指标计算
 
 ### 3. Web管理界面 (Node.js)
+
 - **端口**: 3000
 - **功能**:
   - 查看每日总结
@@ -69,6 +77,7 @@ docker-compose logs -f
   - 系统状态监控
 
 ### 4. PostgreSQL数据库
+
 - **端口**: 5432
 - **数据保留**: 1个月
 
@@ -103,16 +112,19 @@ docker-compose logs -f web
 ### 服务无法启动
 
 1. 检查端口占用：
+
 ```bash
 netstat -tulpn | grep -E ':(8080|8000|3000|5432)'
 ```
 
-2. 查看服务日志：
+1. 查看服务日志：
+
 ```bash
 docker-compose logs
 ```
 
-3. 检查数据库连接：
+1. 检查数据库连接：
+
 ```bash
 docker-compose exec postgres psql -U fin_user -d financial_db -c "SELECT version();"
 ```
@@ -120,11 +132,13 @@ docker-compose exec postgres psql -U fin_user -d financial_db -c "SELECT version
 ### 数据采集失败
 
 1. 检查网络连接：
+
 ```bash
 docker-compose exec collector ping -c 3 google.com
 ```
 
-2. 查看API日志：
+1. 查看API日志：
+
 ```bash
 docker-compose logs collector | tail -100
 ```
@@ -132,11 +146,13 @@ docker-compose logs collector | tail -100
 ### AI分析失败
 
 1. 检查Python依赖：
+
 ```bash
 docker-compose exec analyzer pip list
 ```
 
-2. 查看分析日志：
+1. 查看分析日志：
+
 ```bash
 docker-compose logs analyzer | tail -100
 ```
@@ -146,12 +162,14 @@ docker-compose logs analyzer | tail -100
 ### 单独运行服务
 
 #### 数据收集服务
+
 ```bash
 cd collector
 go run cmd/server/main.go
 ```
 
 #### AI分析引擎
+
 ```bash
 cd analyzer
 pip install -r requirements.txt
@@ -159,6 +177,7 @@ uvicorn main:app --reload
 ```
 
 #### Web管理界面
+
 ```bash
 cd web
 npm install
@@ -168,15 +187,18 @@ npm run dev
 ## 配置说明
 
 ### 数据库配置
+
 - `DB_NAME`: 数据库名称
 - `DB_USER`: 数据库用户
 - `DB_PASSWORD`: 数据库密码
 
 ### 消息推送配置
+
 - `WECHAT_WEBHOOK`: 微信企业号webhook URL
 - `FEISHU_WEBHOOK`: 飞书机器人webhook URL
 
 ### 数据源配置
+
 - `ALPHA_VANTAGE_API_KEY`: Alpha Vantage API密钥
 - `YAHOO_FINANCE_ENABLED`: 启用Yahoo Finance
 - `AKSHARE_ENABLED`: 启用AKShare
