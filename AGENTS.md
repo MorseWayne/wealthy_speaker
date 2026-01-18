@@ -5,6 +5,7 @@ This file contains guidelines for agentic coding agents working on the wealthy s
 ## Build Commands
 
 ### Go Services (Data Collector)
+
 ```bash
 cd collector
 
@@ -28,6 +29,7 @@ go vet ./...
 ```
 
 ### Python AI Engine
+
 ```bash
 cd analyzer
 
@@ -49,6 +51,7 @@ black analyzer/
 ```
 
 ### Node.js Web Interface
+
 ```bash
 cd web
 
@@ -73,6 +76,7 @@ npm run build
 ### Go Code Style
 
 #### Imports
+
 Use standard format: stdlib, third-party, local packages. Group imports with blank lines between groups.
 
 ```go
@@ -87,6 +91,7 @@ import (
 ```
 
 #### Naming Conventions
+
 - **Packages**: lowercase, short (e.g., `collector`, `models`)
 - **Constants**: `UPPER_SNAKE_CASE`
 - **Variables**: `camelCase` for local, `PascalCase` for exported
@@ -94,6 +99,7 @@ import (
 - **Interfaces**: `PascalCase` ending with `er`
 
 #### Error Handling
+
 Always handle errors explicitly. Use `fmt.Errorf` for error wrapping. Return errors as last return value.
 
 ```go
@@ -109,6 +115,7 @@ func CollectData(symbol string) (*StockData, error) {
 ### Python Code Style
 
 #### Imports
+
 Use absolute imports. Group imports: stdlib, third-party, local.
 
 ```python
@@ -123,11 +130,13 @@ from analyzer.models import NewsData
 ```
 
 #### Naming Conventions
+
 - **Variables/Functions**: `snake_case`
 - **Classes**: `PascalCase`
 - **Constants**: `UPPER_SNAKE_CASE`
 
 #### Type Hints
+
 Use type hints for all function signatures.
 
 ```python
@@ -142,6 +151,7 @@ def analyze_sentiment(text: str) -> Optional[float]:
 ### Node.js Code Style
 
 #### Imports
+
 Use ES6 import/export syntax.
 
 ```javascript
@@ -152,12 +162,14 @@ import { StockData } from '../types';
 ```
 
 #### Naming Conventions
+
 - **Variables/Functions**: `camelCase`
 - **Classes/Components**: `PascalCase`
 - **Constants**: `UPPER_SNAKE_CASE`
 - **Files**: `kebab-case`
 
 #### Error Handling
+
 Use async/await with try/catch.
 
 ```javascript
@@ -175,6 +187,7 @@ async function fetchStock(symbol) {
 ## Testing Guidelines
 
 ### Go Testing
+
 Use table-driven tests for multiple scenarios. Test both success and error cases.
 
 ```go
@@ -201,6 +214,7 @@ func TestCollectData(t *testing.T) {
 ```
 
 ### Python Testing
+
 Use pytest fixtures for setup. Parametrize tests for multiple inputs.
 
 ```python
@@ -217,16 +231,18 @@ def test_sentiment_analysis():
 ## Docker Guidelines
 
 ### Multi-stage Builds
+
 Use multi-stage builds for Go services to minimize image size.
 
 ```dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25.6-alpine AS builder
 # Build stage
 FROM alpine:latest
 # Runtime stage
 ```
 
 ### Environment Variables
+
 Use `.env` files for configuration. Never commit secrets.
 
 ## Development Workflow

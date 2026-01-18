@@ -26,19 +26,19 @@ nano .env
 1. 启动所有服务：
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 1. 查看服务状态：
 
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 1. 查看日志：
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ### 服务访问
@@ -84,27 +84,27 @@ docker-compose logs -f
 ## 停止服务
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## 清理数据
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ## 重启服务
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ## 查看特定服务日志
 
 ```bash
-docker-compose logs -f collector
-docker-compose logs -f analyzer
-docker-compose logs -f web
+docker compose logs -f collector
+docker compose logs -f analyzer
+docker compose logs -f web
 ```
 
 ## 故障排查
@@ -120,13 +120,13 @@ netstat -tulpn | grep -E ':(8080|8000|3000|5432)'
 1. 查看服务日志：
 
 ```bash
-docker-compose logs
+docker compose logs
 ```
 
 1. 检查数据库连接：
 
 ```bash
-docker-compose exec postgres psql -U fin_user -d financial_db -c "SELECT version();"
+docker compose exec postgres psql -U fin_user -d financial_db -c "SELECT version();"
 ```
 
 ### 数据采集失败
@@ -134,13 +134,13 @@ docker-compose exec postgres psql -U fin_user -d financial_db -c "SELECT version
 1. 检查网络连接：
 
 ```bash
-docker-compose exec collector ping -c 3 google.com
+docker compose exec collector ping -c 3 google.com
 ```
 
 1. 查看API日志：
 
 ```bash
-docker-compose logs collector | tail -100
+docker compose logs collector | tail -100
 ```
 
 ### AI分析失败
@@ -148,13 +148,13 @@ docker-compose logs collector | tail -100
 1. 检查Python依赖：
 
 ```bash
-docker-compose exec analyzer pip list
+docker compose exec analyzer pip list
 ```
 
 1. 查看分析日志：
 
 ```bash
-docker-compose logs analyzer | tail -100
+docker compose logs analyzer | tail -100
 ```
 
 ## 开发模式

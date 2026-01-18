@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   postgres:
@@ -39,6 +38,10 @@ services:
     build:
       context: ./collector
       dockerfile: Dockerfile
+      args:
+        - HTTP_PROXY=${HTTP_PROXY}
+        - HTTPS_PROXY=${HTTPS_PROXY}
+        - NO_PROXY=${NO_PROXY}
     container_name: wealthy-collector
     depends_on:
       postgres:
@@ -70,6 +73,10 @@ services:
     build:
       context: ./analyzer
       dockerfile: Dockerfile
+      args:
+        - HTTP_PROXY=${HTTP_PROXY}
+        - HTTPS_PROXY=${HTTPS_PROXY}
+        - NO_PROXY=${NO_PROXY}
     container_name: wealthy-analyzer
     depends_on:
       postgres:
@@ -85,16 +92,20 @@ services:
       - "8000:8000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-    interval: 30s
-    timeout: 10s
-    retries: 3
-    start_period: 30s
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     restart: unless-stopped
 
   web:
     build:
       context: ./web
       dockerfile: Dockerfile
+      args:
+        - HTTP_PROXY=${HTTP_PROXY}
+        - HTTPS_PROXY=${HTTPS_PROXY}
+        - NO_PROXY=${NO_PROXY}
     container_name: wealthy-web
     depends_on:
       collector:
