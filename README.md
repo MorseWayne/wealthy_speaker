@@ -344,7 +344,7 @@ docker-compose logs > app.log
 
 使用 Conventional Commits 规范：
 
-```
+```text
 feat: 添加新功能
 fix: 修复bug
 docs: 文档更新
