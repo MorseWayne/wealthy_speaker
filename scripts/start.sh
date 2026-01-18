@@ -105,10 +105,11 @@ check_infrastructure() {
 init_database() {
     log_info "检查数据库配置..."
     
-    local db_name="${DB_NAME:-wealthy_speaker}"
-    local db_user="${DB_USER:-wealthy_user}"
+    local db_name="${DB_NAME:-financial_db}"
+    local db_user="${DB_USER:-fin_user}"
     local db_password="${DB_PASSWORD:-}"
     local db_host="${DB_HOST:-localhost}"
+    local db_port="${DB_PORT:-5432}"
     
     if [ -z "$db_password" ]; then
         log_error "DB_PASSWORD 未设置，请在 .env 文件中配置"
@@ -147,7 +148,7 @@ init_database() {
     fi
     
     # 测试连接
-    if PGPASSWORD="${db_password}" psql -h "$db_host" -U "${db_user}" -d "${db_name}" -c "SELECT 1;" > /dev/null 2>&1; then
+    if PGPASSWORD="${db_password}" psql -h "$db_host" -p "$db_port" -U "${db_user}" -d "${db_name}" -c "SELECT 1;" > /dev/null 2>&1; then
         log_success "数据库连接正常"
     else
         log_error "无法连接到数据库，请检查密码配置"
@@ -179,13 +180,18 @@ start_collector() {
     
     cd "$PROJECT_ROOT/collector"
     
-    # 设置环境变量
-    export DB_HOST="${DB_HOST:-localhost}"
-    export DB_PORT="${DB_PORT:-5432}"
-    export REDIS_HOST="${REDIS_HOST:-localhost}"
-    export REDIS_PORT="${REDIS_PORT:-6379}"
+    # 确保数据库环境变量已设置（从 .env 加载）
+    if [ -z "${DB_PASSWORD:-}" ]; then
+        log_error "DB_PASSWORD 未设置"
+        return 1
+    fi
+
+    # 统一 Collector 监听地址（优先使用 COLLECTOR_ADDR，否则根据端口生成）
+    if [ -z "${COLLECTOR_ADDR:-}" ]; then
+        export COLLECTOR_ADDR=":${port}"
+    fi
     
-    # 启动服务
+    # 启动服务（环境变量已在 load_env 中加载）
     nohup go run cmd/server/main.go > "$LOG_DIR/collector.log" 2>&1 &
     echo $! > "$LOG_DIR/collector.pid"
     
@@ -234,10 +240,21 @@ start_analyzer() {
         source venv/bin/activate
     fi
     
-    # 设置环境变量
-    export DATABASE_URL="postgresql://${DB_USER:-wealthy_user}:${DB_PASSWORD:-}@localhost:5432/${DB_NAME:-wealthy_speaker}"
-    export REDIS_URL="redis://localhost:6379/0"
-    export HOST="0.0.0.0"
+    # 设置环境变量（尽量全部从 .env 统一管理）
+    local db_host="${DB_HOST:-localhost}"
+    local db_port="${DB_PORT:-5432}"
+    local db_user="${DB_USER:-fin_user}"
+    local db_password="${DB_PASSWORD:-}"
+    local db_name="${DB_NAME:-financial_db}"
+
+    local redis_host="${REDIS_HOST:-localhost}"
+    local redis_port="${REDIS_PORT:-6379}"
+    local redis_db="${REDIS_DB:-0}"
+
+    # 允许直接在 .env 中指定 DATABASE_URL / REDIS_URL；否则根据 DB_/REDIS_ 拼接
+    export DATABASE_URL="${DATABASE_URL:-postgresql://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}}"
+    export REDIS_URL="${REDIS_URL:-redis://${redis_host}:${redis_port}/${redis_db}}"
+    export HOST="${ANALYZER_HOST:-0.0.0.0}"
     export PORT="$port"
     
     # 启动服务
@@ -282,8 +299,8 @@ start_web() {
     
     # 设置环境变量
     export PORT="$port"
-    export DATA_COLLECTOR_URL="http://localhost:${SERVICE_PORTS[collector]}"
-    export AI_ANALYZER_URL="http://localhost:${SERVICE_PORTS[analyzer]}"
+    export DATA_COLLECTOR_URL="${DATA_COLLECTOR_URL:-http://localhost:${SERVICE_PORTS[collector]}}"
+    export AI_ANALYZER_URL="${AI_ANALYZER_URL:-http://localhost:${SERVICE_PORTS[analyzer]}}"
     
     # 启动服务
     nohup npm start > "$LOG_DIR/web.log" 2>&1 &

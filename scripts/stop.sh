@@ -168,6 +168,13 @@ main() {
     done
     
     print_header "Wealthy Speaker - 停止服务"
+
+    # 尽量加载 .env（用于端口集中管理；否则可能无法停止自定义端口的服务）
+    if ! load_env 2>/dev/null; then
+        log_warning ".env 未找到，使用脚本默认端口"
+    fi
+    # 即使不使用 .env，也允许外部导出的环境变量覆盖默认配置
+    apply_env_overrides
     
     # 停止服务（按启动的逆序）
     case $target in

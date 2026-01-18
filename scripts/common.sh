@@ -163,6 +163,29 @@ http_health_check() {
 # 环境变量
 # ============================================================
 
+# 将 .env 中的配置映射到脚本运行时配置
+# 说明:
+# - 端口使用 COLLECTOR_PORT / ANALYZER_PORT / WEB_PORT 覆盖默认值
+# - 本地访问域名使用 LOCAL_HOST（默认 localhost）
+apply_env_overrides() {
+    # 端口覆盖（用于 start/stop/status 等所有脚本统一）
+    if [ -n "${COLLECTOR_PORT:-}" ]; then
+        SERVICE_PORTS["collector"]="${COLLECTOR_PORT}"
+    fi
+    if [ -n "${ANALYZER_PORT:-}" ]; then
+        SERVICE_PORTS["analyzer"]="${ANALYZER_PORT}"
+    fi
+    if [ -n "${WEB_PORT:-}" ]; then
+        SERVICE_PORTS["web"]="${WEB_PORT}"
+    fi
+
+    # 健康检查 URL 统一由端口计算，避免散落硬编码
+    local host="${LOCAL_HOST:-localhost}"
+    SERVICE_HEALTH_URLS["collector"]="http://${host}:${SERVICE_PORTS[collector]}/health"
+    SERVICE_HEALTH_URLS["analyzer"]="http://${host}:${SERVICE_PORTS[analyzer]}/health"
+    SERVICE_HEALTH_URLS["web"]="http://${host}:${SERVICE_PORTS[web]}/health"
+}
+
 # 加载 .env 文件
 load_env() {
     local env_file="${1:-$PROJECT_ROOT/.env}"
@@ -187,6 +210,9 @@ load_env() {
             # 导出变量
             export "$key=$value"
         done < "$env_file"
+
+        # 根据 .env 的内容刷新脚本内置配置（端口/URL 等）
+        apply_env_overrides
         return 0
     else
         return 1

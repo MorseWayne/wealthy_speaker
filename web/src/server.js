@@ -1,7 +1,13 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-require('dotenv').config();
+const path = require('path');
+
+// 优先使用 ENV_FILE 指定；默认加载仓库根目录 .env（本地运行）
+// Docker 场景通常通过环境变量注入，这里加载失败也不影响运行
+require('dotenv').config({
+  path: process.env.ENV_FILE || path.resolve(__dirname, '..', '..', '.env')
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;

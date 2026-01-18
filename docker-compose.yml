@@ -60,7 +60,7 @@ services:
       FEISHU_WEBHOOK: ${FEISHU_WEBHOOK}
       ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY}
     ports:
-      - "8080:8080"
+      - "${COLLECTOR_PORT:-8080}:8080"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
       interval: 30s
@@ -89,7 +89,7 @@ services:
       HOST: 0.0.0.0
       PORT: 8000
     ports:
-      - "8000:8000"
+      - "${ANALYZER_PORT:-8000}:8000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -117,7 +117,7 @@ services:
       DATA_COLLECTOR_URL: http://collector:8080
       AI_ANALYZER_URL: http://analyzer:8000
     ports:
-      - "3000:3000"
+      - "${WEB_PORT:-3000}:3000"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s

@@ -13,6 +13,7 @@ import (
 	"wealthy-speaker/collector/internal/database"
 	"wealthy-speaker/collector/internal/scheduler"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
@@ -83,25 +84,35 @@ func main() {
 
 // loadConfig 加载配置
 func loadConfig() {
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config")
-	viper.AddConfigPath(".")
+	// 尝试加载 .env（本地开发体验更好；Docker 环境通常直接注入环境变量）
+	// 说明:
+	// - 从仓库根目录运行: .env
+	// - 从 collector 目录运行: ../.env
+	_ = godotenv.Load(".env")
+	_ = godotenv.Load("../.env")
 
 	// 设置默认值
+	viper.SetDefault("server.addr", ":8080")
 	viper.SetDefault("database.host", "localhost")
 	viper.SetDefault("database.port", "5432")
 	viper.SetDefault("database.user", "fin_user")
-	viper.SetDefault("database.password", "fin_password")
+	viper.SetDefault("database.password", "")
 	viper.SetDefault("database.name", "financial_db")
 	viper.SetDefault("push.wechat_webhook", "")
 	viper.SetDefault("push.feishu_webhook", "")
+	viper.SetDefault("data_sources.alpha_vantage.api_key", "")
+
+	// 绑定环境变量（使用 .env 文件中的变量名）
+	_ = viper.BindEnv("server.addr", "COLLECTOR_ADDR")
+	_ = viper.BindEnv("database.host", "DB_HOST")
+	_ = viper.BindEnv("database.port", "DB_PORT")
+	_ = viper.BindEnv("database.user", "DB_USER")
+	_ = viper.BindEnv("database.password", "DB_PASSWORD")
+	_ = viper.BindEnv("database.name", "DB_NAME")
+	_ = viper.BindEnv("push.wechat_webhook", "WECHAT_WEBHOOK")
+	_ = viper.BindEnv("push.feishu_webhook", "FEISHU_WEBHOOK")
+	_ = viper.BindEnv("data_sources.alpha_vantage.api_key", "ALPHA_VANTAGE_API_KEY")
 
 	// 读取环境变量
 	viper.AutomaticEnv()
-
-	// 读取配置文件
-	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("Warning: Config file not found, using defaults: %v", err)
-	}
 }

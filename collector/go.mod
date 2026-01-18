@@ -5,6 +5,7 @@ go 1.25
 require (
 	github.com/go-resty/resty/v2 v2.11.0
 	github.com/gorilla/mux v1.8.1
+	github.com/joho/godotenv v1.5.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.18.2
 	gorm.io/driver/postgres v1.5.4

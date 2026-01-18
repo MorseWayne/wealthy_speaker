@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic_settings import BaseSettings
+from pydantic import Field
 from typing import List, Optional
 import uvicorn
 import os
@@ -10,14 +11,47 @@ from analyzer.sentiment import SentimentAnalyzer
 from analyzer.advisor import InvestmentAdvisor
 
 
+_DEFAULT_ENV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
+
+
+def _build_database_url() -> str:
+    """优先 DATABASE_URL，否则根据 DB_* 拼接（统一由根目录 .env 管理）。"""
+    direct = os.getenv("DATABASE_URL")
+    if direct:
+        return direct
+
+    user = os.getenv("DB_USER", "fin_user")
+    password = os.getenv("DB_PASSWORD", "")
+    host = os.getenv("DB_HOST", "localhost")
+    port = os.getenv("DB_PORT", "5432")
+    name = os.getenv("DB_NAME", "financial_db")
+    return f"postgresql://{user}:{password}@{host}:{port}/{name}"
+
+
+def _build_redis_url() -> str:
+    """优先 REDIS_URL，否则根据 REDIS_* 拼接。"""
+    direct = os.getenv("REDIS_URL")
+    if direct:
+        return direct
+
+    host = os.getenv("REDIS_HOST", "localhost")
+    port = os.getenv("REDIS_PORT", "6379")
+    db = os.getenv("REDIS_DB", "0")
+    return f"redis://{host}:{port}/{db}"
+
+
 class Settings(BaseSettings):
     """应用配置"""
-    database_url: str = "postgresql://fin_user:fin_password@postgres:5432/financial_db"
+    database_url: str = Field(default_factory=_build_database_url)
+    redis_url: str = Field(default_factory=_build_redis_url)
     host: str = "0.0.0.0"
     port: int = 8000
 
     class Config:
-        env_file = ".env"
+        # 统一默认读仓库根目录 .env（本地运行时）
+        # Docker 场景通常通过环境变量注入，不依赖文件
+        env_file = os.getenv("ENV_FILE", _DEFAULT_ENV_FILE)
+        extra = 'ignore'  # 忽略 .env 中未定义的字段
 
 
 app = FastAPI(title="Wealthy Speaker AI Analyzer API", version="1.0.0")

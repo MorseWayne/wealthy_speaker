@@ -99,12 +99,14 @@ check_database() {
         if load_env 2>/dev/null; then
             # 测试连接
             if [ -n "${DB_PASSWORD:-}" ] && [ -n "${DB_USER:-}" ] && [ -n "${DB_NAME:-}" ]; then
-                if PGPASSWORD="${DB_PASSWORD}" psql -h localhost -U "${DB_USER}" -d "${DB_NAME}" -c "SELECT 1;" > /dev/null 2>&1; then
+                local db_host="${DB_HOST:-localhost}"
+                local db_port="${DB_PORT:-5432}"
+                if PGPASSWORD="${DB_PASSWORD}" psql -h "$db_host" -p "$db_port" -U "${DB_USER}" -d "${DB_NAME}" -c "SELECT 1;" > /dev/null 2>&1; then
                     echo -e "                    ${GREEN}✓ 数据库连接正常${NC}"
                     
                     # 显示数据库大小
                     local db_size
-                    db_size=$(PGPASSWORD="${DB_PASSWORD}" psql -h localhost -U "${DB_USER}" -d "${DB_NAME}" -t -c "SELECT pg_size_pretty(pg_database_size('${DB_NAME}'));" 2>/dev/null | xargs)
+                    db_size=$(PGPASSWORD="${DB_PASSWORD}" psql -h "$db_host" -p "$db_port" -U "${DB_USER}" -d "${DB_NAME}" -t -c "SELECT pg_size_pretty(pg_database_size('${DB_NAME}'));" 2>/dev/null | xargs)
                     if [ -n "$db_size" ]; then
                         echo -e "                    数据库大小: $db_size"
                     fi
@@ -251,6 +253,13 @@ main() {
         esac
     done
     
+    # 尽量加载 .env（用于端口/URL/数据库等配置集中管理）
+    if ! load_env 2>/dev/null; then
+        log_warning ".env 未找到，使用脚本默认配置"
+    fi
+    # 即使不使用 .env，也允许外部导出的环境变量覆盖默认配置
+    apply_env_overrides
+
     # JSON 模式
     if [ "$json" = "true" ]; then
         show_json
@@ -274,9 +283,10 @@ main() {
     
     log_info "访问地址:"
     echo ""
-    echo "  Web 界面:       http://localhost:${SERVICE_PORTS[web]}"
-    echo "  Collector API:  http://localhost:${SERVICE_PORTS[collector]}"
-    echo "  Analyzer API:   http://localhost:${SERVICE_PORTS[analyzer]}"
+    local host="${LOCAL_HOST:-localhost}"
+    echo "  Web 界面:       http://${host}:${SERVICE_PORTS[web]}"
+    echo "  Collector API:  http://${host}:${SERVICE_PORTS[collector]}"
+    echo "  Analyzer API:   http://${host}:${SERVICE_PORTS[analyzer]}"
     
     # 详细模式
     if [ "$verbose" = "true" ]; then
