@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Financial Summary Service - Dashboard">
+    <title>Financial Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="container header-content">
+                <div class="header-title">
+                    <h1>&#128202; Financial Dashboard</h1>
+                    <span class="subtitle">Daily Summary Service</span>
+                </div>
+                <div class="header-actions">
+                    <div class="status-indicator">
+                        <span id="statusDot" class="status-dot"></span>
+                        <span id="statusText">Checking...</span>
+                    </div>
+                    <button id="themeToggle" class="theme-toggle">&#9790; Dark</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="container">
+                <nav class="nav-tabs">
+                    <button class="nav-tab active" data-tab="today">
+                        <span class="icon">&#128202;</span> Today
+                    </button>
+                    <button class="nav-tab" data-tab="history">
+                        <span class="icon">&#128214;</span> History
+                    </button>
+                    <button class="nav-tab" data-tab="stocks">
+                        <span class="icon">&#128200;</span> Stocks
+                    </button>
+                    <button class="nav-tab" data-tab="news">
+                        <span class="icon">&#128240;</span> News
+                    </button>
+                </nav>
+
+                <div id="content">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <span class="loading-text">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.875rem;">
+            Financial Summary Service v1.0.0
+        </footer>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

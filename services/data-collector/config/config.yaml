@@ -1,0 +1,29 @@
+server:
+  addr: ":8080"
+
+database:
+  host: postgres
+  port: "5432"
+  user: fin_user
+  password: ${DB_PASSWORD}
+  name: financial_db
+
+push:
+  wechat_webhook: ${WECHAT_WEBHOOK}
+  feishu_webhook: ${FEISHU_WEBHOOK}
+
+data_sources:
+  yahoo_finance:
+    enabled: true
+    rate_limit: 2000
+
+  akshare:
+    enabled: true
+
+  alpha_vantage:
+    enabled: false
+    api_key: ${ALPHA_VANTAGE_API_KEY}
+
+logging:
+  level: info
+  format: json

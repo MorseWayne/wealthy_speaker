@@ -1,0 +1,10 @@
+database:
+  url: postgresql://fin_user:fin_password@postgres:5432/financial_db
+
+server:
+  host: 0.0.0.0
+  port: 8000
+
+logging:
+  level: info
+  format: json
